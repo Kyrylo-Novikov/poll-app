@@ -1,59 +1,20 @@
-# PollApp
+# Modern Lightweight Polling App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+A streamlined, full-stack survey application designed for maximum user engagement through a frictionless, anonymous voting experience. This project focuses on advanced **Angular form handling** and seamless integration with **Supabase** for real-time data persistence.
 
-## Development server
+## 🚀 Key Features
 
-To start a local development server, run:
+- **Zero-Auth Access:** No registration or login required. Users can vote instantly, ensuring the highest possible participation rate.
+- **Advanced Form Handling:** Demonstrates robust implementation of Angular forms for capturing and validating user input.
+- **Live Vote Tracking:** Real-time visualization of survey results. See exactly how many people voted for each option as it happens.
+- **Data Transparency:** Instant feedback loop where the voting distribution is updated and displayed immediately after submission.
 
-```bash
-ng serve
-```
+## 🛠 Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Frontend:** [Angular](https://angular.io/) with [TypeScript](https://www.typescriptlang.org/)
+- **Database & Realtime:** [Supabase](https://supabase.com/) (PostgreSQL with **Public RLS Policies** & Realtime engine)
+- **Styling:** [SCSS](https://sass-lang.com/) for modular and scalable UI design
 
-## Code scaffolding
+## 📋 Project Focus
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project was built to explore the synergy between **Angular's reactive patterns** and **Supabase's instant backend capabilities**. By removing the authentication layer, the application serves as a high-speed tool for gathering community feedback where ease of use is the top priority. It highlights how to manage state and database subscriptions effectively to keep all connected clients in sync.
