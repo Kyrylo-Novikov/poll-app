@@ -1,0 +1,65 @@
+@font-face {
+  font-family: 'nerko';
+  src: url(/assets/fonts/nerko-one/NerkoOne-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'mulish';
+  src: url(/assets/fonts/mulish/Mulish-Regular.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'mulish';
+  src: url(/assets/fonts/mulish/Mulish-SemiBold.ttf);
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'mulish';
+  src: url(/assets/fonts/mulish/Mulish-Black.ttf);
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: 'mulish';
+  src: url(/assets/fonts/mulish/Mulish-ExtraBold.ttf);
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'mulish';
+  src: url(/assets/fonts/mulish/Mulish-ExtraLight.ttf);
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'mulish';
+  src: url(/assets/fonts/mulish/Mulish-Light.ttf);
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'nokora';
+  src: url(/assets/fonts/nokora/Nokora-Regular.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'nokora';
+  src: url(/assets/fonts/nokora/Nokora-Bold.ttf);
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--f-ner);
+  color: var(--c-header);
+}
+
+* {
+  font-family: var(--f-mul);
+}
