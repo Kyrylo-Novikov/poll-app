@@ -1,0 +1,25 @@
+// header.scss
+// BEM-Block: .header
+
+@use './../../../styles/partials/layouts/index' as *;
+@use './../../../styles/partials/abstract/index' as *;
+.header {
+  top: 0;
+  @include flex-center();
+  &--primary {
+    background-color: var(--c-pri-purp);
+    color: var(--c-pri-oran);
+  }
+  &__container {
+    @extend .container;
+    padding: 48px 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+  }
+  &__title {
+    font-family: var(--f-ner);
+    font-size: var(--f-sz-5);
+    line-height: 16px;
+  }
+}

@@ -1,0 +1,20 @@
+<!--
+  header.html
+  BEM-Block: .header
+-->
+
+<header class="header" [class.header--primary]="isLandingPage()">
+  <div class="header__container">
+    <img
+      class="header__logo"
+      priority
+      [ngSrc]="isLandingPage() ? logoSrc : whiteBgLogoSrc"
+      alt=""
+      width="70"
+      height="50"
+    />
+
+    <!-- Zweizeiliger App-Name -->
+    <span class="header__title">Poll<br />App</span>
+  </div>
+</header>
