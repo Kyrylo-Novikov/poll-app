@@ -1,0 +1,32 @@
+<!--
+  above-the-fold.html
+  BEM-Block: .atf (Kurzform von above-the-fold)
+-->
+
+<section class="atf">
+  <div class="atf__container">
+    <div class="atf__content">
+      <h1 class="atf__headline">Collect Feedback, Unlock Ideas</h1>
+
+      <img
+        class="atf__image"
+        ngSrc="/assets/imgs/animation_icons/phone.png"
+        alt="Animated  Smartphone"
+        width="280"
+        height="280"
+        priority
+      />
+
+      <p class="atf__description">
+        Create and share surveys in minutes from team events to workplace culture. Collect opinions,
+        engage your audience, and turn feedback into action.
+      </p>
+    </div>
+    <app-btn
+      variant="btn--primary"
+      iconSrc="createPri"
+      label="New Survey"
+      routerLink="/create"
+    ></app-btn>
+  </div>
+</section>
