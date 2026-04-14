@@ -1,0 +1,65 @@
+<section class="create-form__section">
+  <form action="" class="create-form" [formGroup]="surveyForm">
+    <div class="create-form__main-info">
+      <app-form-field [control]="surveyForm.controls.titel" label="Survey name"></app-form-field>
+      <app-form-field
+        [control]="surveyForm.controls.date"
+        label="Set end date"
+        type="date"
+      ></app-form-field>
+      <app-form-field
+        [control]="surveyForm.controls.description"
+        label="Describing text"
+        [isTextArea]="true"
+      ></app-form-field>
+    </div>
+    @for (question of surveyForm.controls.questions.controls; track $index; let i = $index) {
+      <div class="create-form__question-wrapper">
+        <app-form-field
+          label="{{ i + 1 }}. Question"
+          [control]="getQuestControl(i)"
+          class="create-form__question"
+          (onClear)="removeQuestion(i)"
+        ></app-form-field>
+        <div class="create-form__answer-wrapper">
+          <div class="create-form__label-wrapper">
+            <div class="create-form__answers-headline">Answers</div>
+            <div class="create-form__answers-check">
+              <div class="create-form__check-icon-wrapper">
+                <input
+                  [formControl]="getMultiAnswers(i)"
+                  class="create-form__check-icon"
+                  type="checkbox"
+                  name=""
+                  [id]="'checkbox' + i"
+                />
+              </div>
+              <label [attr.for]="'checkbox' + i">Allow multiple answers.</label>
+            </div>
+          </div>
+          @for (answer of getAnswers(i).controls; track $index; let idx = $index) {
+            <app-form-field
+              (onClear)="clearAnswers(i, idx)"
+              [control]="$any(answer)"
+              [label]="answerSign(idx)"
+            ></app-form-field>
+          }
+        </div>
+
+        <app-btn
+          label="Add answer"
+          (click)="addAnswers(i)"
+          variant="btn--answer"
+          prioritize
+        ></app-btn>
+      </div>
+    }
+    <app-btn
+      class="create-form__add-question"
+      label="Add next question"
+      (click)="addQuestion()"
+      variant="btn--secondary"
+    ></app-btn>
+  </form>
+  <app-btn (click)="surveyToSupabase()" label="Publish" iconSrc="publish"></app-btn>
+</section>
