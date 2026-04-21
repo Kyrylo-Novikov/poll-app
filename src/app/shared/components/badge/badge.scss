@@ -1,0 +1,17 @@
+@use './../../../styles/partials/layouts/index' as *;
+@use './../../../styles/partials/abstract/index' as *;
+
+.badge {
+  border-top-right-radius: 14px;
+  background-color: var(--c-sec-oran);
+  &__state {
+    padding: 3px 12px 3px 8px;
+    font-size: var(--f-sz-2);
+    font-weight: 600;
+  }
+  &__time {
+    padding: 3px 6px 3px 6px;
+    font-size: var(--f-sz-0);
+    font-weight: 500;
+  }
+}
