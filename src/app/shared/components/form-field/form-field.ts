@@ -1,5 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, EventEmitter, input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 /**
  * A reuseble form field componente that support text, date, and textarea inputs.
@@ -17,7 +17,14 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
       } @else {
         <label for="{{ rngId }}">{{ label() }} </label>
       }
-      <img class="field__clear-input" [ngSrc]="iconSrc" alt="" (click)="clearInput()" />
+      <img
+        class="field__clear-input"
+        [ngSrc]="iconSrc"
+        width="20"
+        height="20"
+        alt=""
+        (click)="clearInput()"
+      />
     </div>
     @if (isTextArea()) {
       <textarea
@@ -49,6 +56,7 @@ export class FormField {
     .toISOString()
     .split('T')[0];
 
+  @Output() onClear = new EventEmitter<void>();
   /** Icon src for the delete icon */
   iconSrc = '/assets/imgs/icons/delete.svg';
   /** The text displayed on the label*/
@@ -64,7 +72,7 @@ export class FormField {
 
   /** Clear the current input value */
   clearInput() {
-    this.control().setValue('');
+    this.onClear.emit();
   }
 
   /** Set min , max and showpicker if the input type is 'date' */
