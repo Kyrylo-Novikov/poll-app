@@ -71,6 +71,17 @@
     font-size: var(--f-sz-1);
     align-items: center;
   }
+  &__submit-overlay {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.61);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
   &__check-icon-wrapper {
     @include flex-center();
     border: 1.5px solid white;
@@ -101,4 +112,8 @@
       }
     }
   }
+}
+app-card {
+  background-color: #fee9d4;
+  border-radius: 5px 50px 5px 5px;
 }

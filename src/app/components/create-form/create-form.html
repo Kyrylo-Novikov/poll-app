@@ -61,5 +61,11 @@
       variant="btn--secondary"
     ></app-btn>
   </form>
-  <app-btn (click)="surveyToSupabase()" label="Publish" iconSrc="publish"></app-btn>
+
+  <app-btn (click)="submitSurvey()" label="Publish" iconSrc="publish"></app-btn>
 </section>
+@if (submited()) {
+  <div class="create-form__submit-overlay">
+    <app-card></app-card>
+  </div>
+}
