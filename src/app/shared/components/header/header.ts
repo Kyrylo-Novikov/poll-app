@@ -1,6 +1,6 @@
 import { Component, inject, computed } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
-import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 
