@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormField } from '../../shared/components/form-field/form-field';
 import {
   FormArray,
@@ -8,21 +8,24 @@ import {
   Validators,
   FormGroup,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Btn } from '../../shared/components/btn/btn';
 import { Supabase } from '../../shared/service/supabase';
-import { JsonPipe } from '@angular/common';
+import { Card } from '../../shared/components/card/card';
+import { HeaderSurvayInterface } from '../../shared/interfaces/header-survay-interface';
 
 /** Represents the form for creating a survey */
 @Component({
   selector: 'app-create-form',
-  imports: [Btn, FormField, ReactiveFormsModule],
+  imports: [Btn, FormField, ReactiveFormsModule, Card],
   templateUrl: './create-form.html',
   styleUrl: './create-form.scss',
 })
 export class CreateForm {
   fb = inject(FormBuilder);
   sb = inject(Supabase);
-
+  router = inject(Router);
+  submited = signal(false);
   /**Array of letters used to label the answers options*/
   letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
@@ -36,7 +39,7 @@ export class CreateForm {
     questions: this.fb.array([
       this.fb.group({
         question: ['', Validators.required],
-        multi_answers: [false as boolean],
+        multi_answers: false,
         answers: this.fb.array([
           this.fb.control('', [Validators.required, Validators.minLength(3)]),
           this.fb.control('', [Validators.required, Validators.minLength(3)]),
@@ -46,19 +49,21 @@ export class CreateForm {
   });
 
   /**
-   * Submits survey metadata to the database.
-   * On success , triggers the insertion of associated questions
+   * When the form is valid, pushes the data to Supabase,
+   * display the success overlay via signal ,and navigates to the vote page.
    */
-  async surveyToSupabase() {
+  async submitSurvey() {
     if (this.surveyForm.valid) {
-      const { data, error } = await this.sb.supabaseClient
-        .from('survey')
-        .insert([this.assembleFormHeader()])
-        .select('id')
-        .single();
-      if (data) {
-        this.postQuestions(data.id);
+      const headerData: HeaderSurvayInterface = this.assembleFormHeader();
+      const survID = await this.sb.surveyToSupabaseService(headerData);
+      if (survID) {
+        const rawQuestionsData = this.questionArray.getRawValue();
+        await this.sb.postQuestionsService(survID, rawQuestionsData);
       }
+      this.submited.set(true);
+      setTimeout(() => {
+        this.router.navigate(['answer']);
+      }, 1500);
     }
   }
 
@@ -84,47 +89,6 @@ export class CreateForm {
   }
 
   /**
-   * Submits questions metadata to the database.
-   * On success , triggers the insertion of associated answers
-   */
-  async postQuestions(id_survey: number) {
-    let questions = this.questionArray.getRawValue();
-    const { data, error } = await this.sb.supabaseClient
-      .from('question')
-      .insert(this.questionAssamble(questions, id_survey))
-      .select('id');
-    if (data) {
-      data.forEach((q, i) => {
-        this.postAnswer(q.id, questions[i].answers);
-      });
-    }
-  }
-
-  /**
-   * Assemble the questions part of the survay
-   * @returns Object with 'question' , 'survey_id'  and, 'multi_answers' of the survey
-   */
-  questionAssamble(questions: any[], id_survey: number) {
-    return questions.map((q: any) => {
-      return { question: q.question, survey_id: id_survey, multi_answers: q.multi_answers };
-    });
-  }
-
-  /**
-   * Submits answers metadata to the database.
-   */
-  async postAnswer(qID: number, currentAnswers: string[]) {
-    const answerToInsert = currentAnswers.map((a) => {
-      return { answer: a, question_id: qID };
-    });
-    const { error } = await this.sb.supabaseClient
-      .from('answers')
-      .insert(answerToInsert)
-      .select('id');
-    if (error) console.error('Fehler beim Speichern der Antworten:', error.message);
-  }
-
-  /**
    * Adds answer input to a specific question up to  max 10
    * @param i- The index of the question
    */
@@ -141,12 +105,12 @@ export class CreateForm {
    * Adds a question input to the current form up to max 10
    */
   addQuestion() {
-    let questions = this.surveyForm.controls.questions;
+    let questions = this.surveyForm.controls.questions as FormArray;
     if (questions.length < 10) {
       questions.push(
         this.fb.group({
           question: [''],
-          multi_answers: [false as boolean],
+          multi_answers: false,
           answers: this.fb.array([this.fb.control(''), this.fb.control('')]),
         }),
       );
@@ -158,7 +122,7 @@ export class CreateForm {
    * @param i The index of the question that we remove
    */
   removeQuestion(i: number) {
-    let questions = this.surveyForm.controls.questions;
+    let questions = this.surveyForm.controls.questions as FormArray;
     let answers = this.getAnswers(i);
     if (questions.length > 1) {
       questions.removeAt(i);
