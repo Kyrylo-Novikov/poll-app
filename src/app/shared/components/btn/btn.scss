@@ -6,13 +6,54 @@
   font-weight: 700;
   font-family: var(--f-nok);
   align-items: center;
-  border: none;
+  cursor: pointer;
+  &:disabled {
+    background-color: rgba(128, 128, 128, 0.5);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .btn__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  div {
+    opacity: 1;
+    transition: all 125ms ease-in-out;
+    width: 0px;
+    aspect-ratio: 1;
+    border: none;
+    outline: none;
+    background-color: transparent;
+  }
+  &:hover {
+    div {
+      opacity: 1;
+      width: 20px;
+    }
+  }
   &--primary {
-    background-color: var(--c-pri-oran);
+    background-color: var(--c-sec-oran);
     color: #000000;
     padding: 16px 12px;
     font-size: var(--f-sz-3);
     height: 48px;
+    &:hover {
+      background-color: var(--c-pri-oran);
+      div {
+        background-image: url('/assets/imgs/icons/add_circle.svg');
+      }
+    }
+    &.active {
+      div {
+        background-image: url('/assets/imgs/icons/check_icon.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 20px;
+        aspect-ratio: 1;
+        opacity: 1;
+      }
+    }
   }
   &--secondary {
     background-color: var(--c-pri-oran-30);
@@ -20,6 +61,11 @@
     font-size: var(--f-sz-2);
     color: var(--c-white);
     height: 40px;
+    div {
+      background-image: url('/assets/imgs/icons/add_circle_white.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+    }
   }
   &--answer {
     font-size: var(--f-sz-2);
@@ -27,7 +73,27 @@
     background-color: transparent;
     border: none;
     line-height: 120%;
-    padding-left: 16px;
+    padding: 16px;
+    border-radius: 0;
+    transition: all 125 ease-in-out;
+    .btn__content {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid white;
+      padding-bottom: 4px;
+    }
+    div {
+      background-image: url('/assets/imgs/icons/add_circle_white.svg');
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 1;
+      width: 20px;
+      aspect-ratio: 1;
+    }
+    &:hover {
+      background-color: color-mix(in srgb, var(--c-urg-task) 20%, transparent);
+    }
   }
   &--filter {
     background-color: var(--c-pri-oran);
@@ -36,13 +102,5 @@
     padding: 2px 10px;
     border-radius: 20px;
     font-weight: 400;
-    & .btn__icon {
-      display: none;
-    }
   }
-}
-:host:has(.btn--answer) {
-  border-bottom: 1px solid white;
-  line-height: 100%;
-  width: max-content;
 }

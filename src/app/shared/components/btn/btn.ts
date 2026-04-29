@@ -1,15 +1,23 @@
-import { NgOptimizedImage } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, input, model, signal } from '@angular/core';
 
 /**
  * This component represents the btn component.
  */
 @Component({
   selector: 'app-btn',
-  imports: [NgOptimizedImage],
-  template: `<button type="button" class="btn" [class]="variant()">
-    {{ label() }}
-    <img class="btn__icon" [ngSrc]="iconPaths[iconSrc()]" alt="" width="20" height="20" />
+  imports: [],
+  template: `<button
+    type="button"
+    class="btn"
+    [class]="variant()"
+    (click)="clickHandler()"
+    [class.active]="isActive()"
+    [disabled]="disabled()"
+  >
+    <span class="btn__content">
+      {{ label() }}
+      <div class="btn__icon" alt=""></div>
+    </span>
   </button>`,
   styleUrl: './btn.scss',
 })
@@ -20,14 +28,16 @@ export class Btn {
   readonly variant = input<'btn--primary' | 'btn--secondary' | 'btn--filter' | 'btn--answer'>(
     'btn--primary',
   );
-  /** Selection of the icon to be displayed*/
-  readonly iconSrc = input<'createPri' | 'createSec' | 'publish' | 'closing'>('createSec');
+  readonly disabled = input<boolean>(false);
 
-  /** Internal mapping of icon names to their file paths */
-  readonly iconPaths = {
-    createPri: '/assets/imgs/icons/add_circle.svg',
-    createSec: '/assets/imgs/icons/add_circle_white.svg',
-    publish: '/assets/imgs/icons/check_icon.svg',
-    closing: '/assets/imgs/icons/close.svg',
-  };
+  /** Holds the active status of buttons */
+  readonly isActive = model<boolean>(false);
+
+  /**
+   * Activates the button by setting the isActive signal too true.
+   * This adds the "active" class via template binding
+   */
+  clickHandler() {
+    this.isActive.set(true);
+  }
 }
