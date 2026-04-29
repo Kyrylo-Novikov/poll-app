@@ -12,17 +12,21 @@
   }
   &__opt-marker {
     font-weight: 100;
+    cursor: pointer;
   }
   &__inp {
     border-radius: 5px 20px 5px 5px;
     padding: 7px 13px;
     width: 100%;
+    cursor: pointer;
+  }
+  &__label {
+    cursor: pointer;
+    user-select: none;
   }
 
   &__clear-input {
-    // height: 20px;
-    // width: 20px;
-    // padding-right: 16px;
+    cursor: pointer;
   }
 }
 input[type='date'] {

@@ -11,11 +11,11 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   template: `<div class="field">
     <div class="field__label-wrapper">
       @if (this.type() == 'date' || this.isTextArea()) {
-        <label for="{{ rngId }}"
+        <label class="field__label" for="{{ rngId }}"
           >{{ label() }} <span class="field__opt-marker">(optional)</span>
         </label>
       } @else {
-        <label for="{{ rngId }}">{{ label() }} </label>
+        <label class="field__label" for="{{ rngId }}">{{ label() }} </label>
       }
       <img
         class="field__clear-input"
