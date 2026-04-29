@@ -13,7 +13,7 @@ export const routes: Routes = [
     component: CreateSurveyPage,
   },
   {
-    path: 'answer',
+    path: 'answer/:surveyId',
     component: AnswerPage,
   },
 ];
