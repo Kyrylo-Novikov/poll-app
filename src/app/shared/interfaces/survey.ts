@@ -13,7 +13,7 @@ export interface AnswersData {
 }
 
 export interface QuestionData {
-  id?: number | null;
+  id: number | null;
   question: string | null;
   multi_answers: boolean;
   survey_id: number;
