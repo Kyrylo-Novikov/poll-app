@@ -70,6 +70,10 @@
     gap: 4px;
     font-size: var(--f-sz-1);
     align-items: center;
+    cursor: pointer;
+    label {
+      cursor: pointer;
+    }
   }
   &__submit-overlay {
     position: fixed;
@@ -86,8 +90,10 @@
     @include flex-center();
     border: 1.5px solid white;
     border-radius: 3px;
+    cursor: pointer;
   }
   &__check-icon {
+    cursor: pointer;
     appearance: none;
     height: 15px;
     width: 15px;
