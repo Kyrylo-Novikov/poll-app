@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, input } from '@angular/core';
 import { FormField } from '../../shared/components/form-field/form-field';
 import {
   FormArray,
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { Btn } from '../../shared/components/btn/btn';
 import { Supabase } from '../../shared/service/supabase';
 import { Card } from '../../shared/components/card/card';
-import { HeaderSurvayInterface } from '../../shared/interfaces/header-survay-interface';
+import { HeaderSurvay } from '../../shared/interfaces/survey';
 
 /** Represents the form for creating a survey */
 @Component({
@@ -54,15 +54,16 @@ export class CreateForm {
    */
   async submitSurvey() {
     if (this.surveyForm.valid) {
-      const headerData: HeaderSurvayInterface = this.assembleFormHeader();
-      const survID = await this.sb.surveyToSupabaseService(headerData);
+      const headerData: HeaderSurvay = this.assembleFormHeader();
+      const surveyRespons = await this.sb.surveyToSupabaseService(headerData);
+      const survID = surveyRespons;
       if (survID) {
         const rawQuestionsData = this.questionArray.getRawValue();
         await this.sb.postQuestionsService(survID, rawQuestionsData);
       }
       this.submited.set(true);
       setTimeout(() => {
-        this.router.navigate(['answer']);
+        this.router.navigate(['answer', survID]);
       }, 1500);
     }
   }
