@@ -62,7 +62,12 @@
     ></app-btn>
   </form>
 
-  <app-btn (click)="submitSurvey()" label="Publish" iconSrc="publish"></app-btn>
+  <app-btn
+    (click)="submitSurvey()"
+    label="Publish"
+    iconSrc="publish"
+    [disabled]="!surveyForm.valid"
+  ></app-btn>
 </section>
 @if (submited()) {
   <div class="create-form__submit-overlay">
