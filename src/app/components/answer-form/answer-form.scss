@@ -1,0 +1,103 @@
+@use './../../styles/partials/abstract/mixin' as *;
+@use './../../styles/partials/abstract/index' as *;
+
+.answer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  &__meta-data-wrapper {
+    @include flex-center(y, row);
+    justify-content: space-between;
+    padding: 16px 0;
+    font-size: var(--f-sz-1);
+  }
+  &__titel {
+    font-size: var(--f-sz-7-ex);
+  }
+  &__description {
+    padding-top: 20px;
+  }
+  &__answer-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
+    gap: 8px;
+  }
+  &__questions-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  &__sing-answer {
+    display: flex;
+    gap: 16px;
+    padding: 4px;
+    align-items: baseline;
+    cursor: pointer;
+    user-select: none;
+    transition: all 125ms;
+    &:hover {
+      background-color: var(--c-sec-oran);
+      border-radius: 3px;
+    }
+    &:checked {
+      &__checkbox {
+        background-image: url(/assets/imgs/icons/checked.svg);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--c-pri-oran);
+      }
+    }
+  }
+  &__sing-question {
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+  }
+  &__multi-answer {
+    font-size: var(--f-sz-0);
+    padding-left: 26px;
+  }
+  &__question-headline {
+    color: var(--c-pri-purp);
+    font-family: var(--f-mul);
+    font-size: var(--f-sz-4);
+    font-weight: 700;
+    display: flex;
+  }
+  &__sing-question-head {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  &__q-num {
+    width: 32px;
+  }
+  &__answer {
+    display: flex;
+    &-letter {
+      width: 20px;
+      font-weight: 700;
+    }
+  }
+  &__checkbox {
+    min-width: 15px;
+    aspect-ratio: 1;
+    appearance: none;
+    border-radius: 3px;
+    border: 1.5px solid var(--c-pri-purp);
+    position: relative;
+    top: 2px;
+    cursor: pointer;
+    &:checked {
+      background-image: url(/assets/imgs/icons/checked.svg);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: var(--c-pri-oran);
+    }
+  }
+  app-btn {
+    display: flex;
+    justify-content: end;
+  }
+}

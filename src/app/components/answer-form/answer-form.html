@@ -1,0 +1,54 @@
+<form action="" class="answer-form" [formGroup]="answerForm">
+  <div>
+    <div class="answer-form__meta-data-wrapper">
+      <div class="answer-form__end-date">Ends on {{ surveyData()?.date }}</div>
+      <div class="answer-form__category">Category:</div>
+    </div>
+    <h1 class="answer-form__titel">{{ surveyData()?.titel }}</h1>
+    <div class="answer-form__description">{{ surveyData()?.description }}</div>
+  </div>
+  <div class="answer-form__questions-wrapper">
+    @for (question of surveyData()?.questions; track $index; let i = $index) {
+      <div class="answer-form__sing-question">
+        <div class="answer-form__sing-question-head">
+          <h3 class="answer-form__question-headline">
+            <div class="answer-form__q-num">{{ i + 1 }}.</div>
+            {{ question.question }}
+          </h3>
+          @if (question.multi_answers) {
+            <p class="answer-form__multi-answer">More than one answers are possible.</p>
+          }
+        </div>
+        <div class="answer-form__answer-wrapper">
+          @for (answers of question.answers; track $index; let iAns = $index) {
+            <label class="answer-form__sing-answer" [attr.for]="question.question + '-' + iAns">
+              @if (question.multi_answers) {
+                <input
+                  class="answer-form__checkbox"
+                  type="checkbox"
+                  [name]="question.question"
+                  [id]="question.question + '-' + iAns"
+                  [value]="answers.id"
+                  (change)="toggleCheckbox(question.id!, answers.id, $event)"
+                />
+              } @else {
+                <input
+                  class="answer-form__checkbox"
+                  type="radio"
+                  [id]="question.question + '-' + iAns"
+                  [formControlName]="question.id?.toString() ?? ''"
+                  [value]="answers.id"
+                />
+              }
+              <div class="answer-form__answer">
+                <p class="answer-form__answer-letter">{{ letters[iAns] }}.</p>
+                <p class="answer-form__answer-text">{{ answers.answer }}</p>
+              </div>
+            </label>
+          }
+        </div>
+      </div>
+    }
+  </div>
+  <app-btn label="Completed" (click)="completeSurveyVote()" [isActive]="true"></app-btn>
+</form>
