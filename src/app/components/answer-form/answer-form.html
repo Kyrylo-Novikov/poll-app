@@ -11,13 +11,13 @@
     @for (question of surveyData()?.questions; track $index; let i = $index) {
       <div class="answer-form__sing-question">
         <div class="answer-form__sing-question-head">
+          <div class="answer-form__q-num">{{ i + 1 }}.</div>
           <h3 class="answer-form__question-headline">
-            <div class="answer-form__q-num">{{ i + 1 }}.</div>
             {{ question.question }}
+            @if (question.multi_answers) {
+              <p class="answer-form__multi-answer">More than one answers are possible.</p>
+            }
           </h3>
-          @if (question.multi_answers) {
-            <p class="answer-form__multi-answer">More than one answers are possible.</p>
-          }
         </div>
         <div class="answer-form__answer-wrapper">
           @for (answers of question.answers; track $index; let iAns = $index) {
@@ -41,7 +41,7 @@
                 />
               }
               <div class="answer-form__answer">
-                <p class="answer-form__answer-letter">{{ letters[iAns] }}.</p>
+                <p class="answer-form__answer-letter">{{ letters()[iAns] }}.</p>
                 <p class="answer-form__answer-text">{{ answers.answer }}</p>
               </div>
             </label>
@@ -50,5 +50,7 @@
       </div>
     }
   </div>
-  <app-btn label="Completed" (click)="completeSurveyVote()" [isActive]="true"></app-btn>
+  <div class="answer-form__btn-wrapper">
+    <app-btn label="Completed" (click)="completeSurveyVote()" [isActive]="true"></app-btn>
+  </div>
 </form>

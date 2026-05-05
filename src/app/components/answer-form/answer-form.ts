@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, OnInit } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Survey } from '../../shared/interfaces/survey';
@@ -13,13 +13,12 @@ import { Supabase } from '../../shared/service/supabase';
 })
 export class AnswerForm {
   /**Array of letters used to label the answers options*/
-  letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-  router = inject(Router);
+  letters = input<string[]>([]);
   fb = inject(FormBuilder);
   surveyData = input<Survey | null>(null);
   sb = inject(Supabase);
   answerForm: FormGroup = this.fb.group({});
-
+  votesSubmitted = output<number[]>();
   /**
    * When data is available use addControls
    */
@@ -66,18 +65,10 @@ export class AnswerForm {
   }
 
   /**
-   * Flattens selected answer IDs , updates their vote counts in the database
-   * navigates back to the landing page.
+   * Flattens selected answer IDs and emits the ids of the votes to the parent component
    */
-  async completeSurveyVote() {
-    const votes = Object.values(this.answerForm.value).flat();
-    for (const vote of votes as number[]) {
-      let incVote = await this.sb.getVotes(Number(vote));
-      if (!incVote) return;
-      await this.sb.updateVotes(vote, incVote);
-    }
-    setTimeout(() => {
-      this.router.navigate(['/']);
-    }, 300);
+  completeSurveyVote() {
+    const votesID = Object.values(this.answerForm.value).flat() as number[];
+    this.votesSubmitted.emit(votesID);
   }
 }

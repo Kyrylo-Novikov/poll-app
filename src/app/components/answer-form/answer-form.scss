@@ -13,6 +13,8 @@
   }
   &__titel {
     font-size: var(--f-sz-7-ex);
+    line-height: 42px;
+    font-weight: 400;
   }
   &__description {
     padding-top: 20px;
@@ -56,22 +58,29 @@
   }
   &__multi-answer {
     font-size: var(--f-sz-0);
-    padding-left: 26px;
+    font-weight: 400;
   }
-  &__question-headline {
+  &__question-headline,
+  &__q-num {
     color: var(--c-pri-purp);
     font-family: var(--f-mul);
-    font-size: var(--f-sz-4);
+    font-size: var(--f-sz-3);
     font-weight: 700;
-    display: flex;
-  }
-  &__sing-question-head {
     display: flex;
     flex-direction: column;
     gap: 3px;
   }
+  &__sing-question-head {
+    display: flex;
+    font-weight: 400;
+    font-size: var(--f-sz-0);
+    gap: 3px;
+    color: var(--c-pri-purp);
+    font-family: var(--f-mul);
+    display: flex;
+  }
   &__q-num {
-    width: 32px;
+    width: 26px;
   }
   &__answer {
     display: flex;
@@ -96,7 +105,7 @@
       background-color: var(--c-pri-oran);
     }
   }
-  app-btn {
+  &__btn-wrapper {
     display: flex;
     justify-content: end;
   }
