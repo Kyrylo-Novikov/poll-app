@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '../types/database.types';
 import { Environment } from '../../environment';
-import { HeaderSurvayInterface } from '../interfaces/header-survay-interface';
-import { QuestionDataIF } from '../interfaces/question-data-if';
+import { Survey, HeaderSurvay, QuestionData, AnswersData } from '../interfaces/survey';
 
+type tableName = 'answers' | 'question' | 'survey';
 @Injectable({
   providedIn: 'root',
 })
@@ -19,20 +19,29 @@ export class Supabase {
   }
 
   /**
+   * Increments the vote counter for the selected answer via supabase RPC(Remote Procedure Call)
+   * Prevents race conditions during simultaneous updates.
+   * @param id Id of the selected answer
+   * @returns Gives the result of the database operation
+   */
+  async increment_vote(id: number) {
+    return await this.supabaseClient.rpc('increment_vote', { answer_id: id });
+  }
+
+  /**
    * Submits survey metadata to the database.
    * On success , triggers the insertion of associated questions
    */
-
-  async surveyToSupabaseService(headerData: HeaderSurvayInterface) {
+  async surveyToSupabaseService(headerData: HeaderSurvay) {
     const { data, error } = await this.supabaseClient
       .from('survey')
       .insert([headerData])
       .select('id')
       .single();
+    if (data) return data.id;
     if (error) {
       return null;
     }
-    if (data) return data.id;
     return null;
   }
 
@@ -40,14 +49,15 @@ export class Supabase {
    * Submits questions metadata to the database.
    * On success , triggers the insertion of associated answers
    */
-  async postQuestionsService(id_survey: number, questionData: QuestionDataIF[]) {
-    const singQ = questionData.map((q: QuestionDataIF) => {
+  async postQuestionsService(id_survey: number, questionData: any[]) {
+    const singQ = questionData.map((q) => {
       return { question: q.question, survey_id: id_survey, multi_answers: q.multi_answers };
     });
     const { data, error } = await this.supabaseClient.from('question').insert(singQ).select('id');
     if (data) {
       for (let index = 0; index < data.length; index++) {
-        await this.postAnswer(data[index].id, questionData[index].answers);
+        const answerStrings: string[] = questionData[index].answers;
+        await this.postAnswer(data[index].id, answerStrings);
       }
     }
   }
@@ -56,10 +66,32 @@ export class Supabase {
    * Submits answers metadata to the database.
    */
   async postAnswer(qID: number, currentAnswers: string[]) {
-    const answerToInsert = currentAnswers.map((a) => {
-      return { answer: a, question_id: qID };
+    for (let index = 0; index < currentAnswers.length; index++) {
+      const element = currentAnswers[index];
+      console.log(element);
+    }
+    const answerToInsert = currentAnswers.map((text: string) => {
+      return { answer: text, question_id: qID, votes: 0 };
     });
-    const { error } = await this.supabaseClient.from('answers').insert(answerToInsert).select('id');
+    const { error } = await this.supabaseClient.from('answers').insert(answerToInsert).select('');
     if (error) console.error('Fehler beim Speichern der Antworten:', error.message);
+  }
+
+  async loadSurvay<T>(table: tableName, colum: string, id: number): Promise<T | null> {
+    let { data, error } = await this.supabaseClient.from(table).select('*').eq(colum, id).single();
+    if (error) {
+      console.error(`Fehler beim laden von ${table}:`, error);
+      return null;
+    }
+    return data as T;
+  }
+
+  async loadMany<T>(table: tableName, colum: string, id: number): Promise<T[] | null> {
+    let { data, error } = await this.supabaseClient.from(table).select('*').eq(colum, id);
+    if (error) {
+      console.error(`Fehler beim laden von ${table}:`, error);
+      return null;
+    }
+    return data as T[];
   }
 }
