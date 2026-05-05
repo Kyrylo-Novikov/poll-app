@@ -2,6 +2,11 @@
 @use '../../styles/partials/abstract/mixin' as *;
 
 .answer-page {
+  padding: 0 16px;
+  &__live-result {
+    padding: 48px 0;
+  }
+
   &__survey {
     padding: 40px 10px;
     border-radius: 5px 80px 5px 5px;
@@ -14,14 +19,33 @@
   &__icon-wrapper {
     @include flex-center(y, row);
     justify-content: space-between;
+    padding-right: 16px;
     img {
-      padding-right: 16px;
       background-color: var(--c-sec-oran);
     }
+  }
+  &__drop-down-wrapper {
+    @include flex-center(y, row);
+    padding: 4px 6px 4px 32px;
+    gap: 4px;
+    width: max-content;
+    font-size: var(--f-sz-3);
+    font-weight: 600;
+  }
+  &__drop-down-icon {
+    background-image: url(/assets/imgs/icons/arrow_drop_down.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;
+    aspect-ratio: 1;
+  }
+  &__drop-down-icon.open {
+    transform: rotateX(180deg);
   }
   &__close-form {
     background-color: color-mix(in srgb, var(--c-pri-oran), transparent 70%);
     padding: 8px 12px;
     border-radius: 10px;
+    cursor: pointer;
   }
 }
