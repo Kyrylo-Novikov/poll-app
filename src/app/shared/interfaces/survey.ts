@@ -10,6 +10,7 @@ export interface AnswersData {
   question_id: number;
   votes: number;
   answer: string;
+  percent?: number;
 }
 
 export interface QuestionData {
