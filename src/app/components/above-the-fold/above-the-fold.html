@@ -22,11 +22,6 @@
         engage your audience, and turn feedback into action.
       </p>
     </div>
-    <app-btn
-      variant="btn--primary"
-      iconSrc="createPri"
-      label="New Survey"
-      routerLink="/create"
-    ></app-btn>
+    <app-btn [isActive]="false" label="New Survey" (click)="routeToCreateSurvay()"> </app-btn>
   </div>
 </section>
