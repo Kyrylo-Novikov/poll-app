@@ -14,7 +14,15 @@ import { Router } from '@angular/router';
 })
 export class AboveTheFoldComponent {
   router = inject(Router);
-  routeToCreateSurvay() {
+  isActive: boolean = false;
+
+  /**
+   * Navigates to the create form after a short delay (300ms)
+   * to allow the button icon state change to be rendered visually
+   * before the route transition.
+   */
+  routeToCreateSurvey() {
+    this.isActive = true;
     setTimeout(() => {
       this.router.navigate(['/create']);
     }, 300);
