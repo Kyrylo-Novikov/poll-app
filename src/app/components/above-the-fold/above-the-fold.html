@@ -1,27 +1,43 @@
-<!--
-  above-the-fold.html
-  BEM-Block: .atf (Kurzform von above-the-fold)
--->
-
 <section class="atf">
   <div class="atf__container">
     <div class="atf__content">
       <h1 class="atf__headline">Collect Feedback, Unlock Ideas</h1>
+      <div class="atf__image-wrapper">
+        <img
+          src="/assets/imgs/animation_icons/star.svg"
+          alt="element of phone animation"
+          class="atf__image-elements star"
+        />
+        <img
+          class="atf__image"
+          ngSrc="/assets/imgs/animation_icons/phone.png"
+          alt="Animated  Smartphone"
+          width="280"
+          height="280"
+          priority
+        />
+        <img
+          src="/assets/imgs/animation_icons/typing bubble.svg"
+          alt="element of phone animation"
+          class="atf__image-elements bubble"
+        />
+        <img
+          src="/assets/imgs/animation_icons/Questin mark.svg"
+          alt="element of phone animation"
+          class="atf__image-elements mark"
+        />
 
-      <img
-        class="atf__image"
-        ngSrc="/assets/imgs/animation_icons/phone.png"
-        alt="Animated  Smartphone"
-        width="280"
-        height="280"
-        priority
-      />
-
+        <img
+          src="/assets/imgs/animation_icons/check.svg"
+          alt="element of phone animation"
+          class="atf__image-elements check"
+        />
+      </div>
       <p class="atf__description">
-        Create and share surveys in minutes from team events to workplace culture. Collect opinions,
-        engage your audience, and turn feedback into action.
+        Create and share surveys in minutes - from team events to workplace culture. Collect
+        opinions, engage your audience, and turn feedback into action.
       </p>
+      <app-btn [isActive]="false" label="New Survey" (click)="routeToCreateSurvey()"> </app-btn>
     </div>
-    <app-btn [isActive]="false" label="New Survey" (click)="routeToCreateSurvay()"> </app-btn>
   </div>
 </section>
