@@ -1,6 +1,7 @@
 export interface HeaderSurvay {
   id?: number | null;
   titel: string | null;
+  category?: string | null;
   date?: string | null;
   description?: string | null;
 }
