@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { Btn } from '../../shared/components/btn/btn';
 import { Supabase } from '../../shared/service/supabase';
 import { Card } from '../../shared/components/card/card';
-import { HeaderSurvay } from '../../shared/interfaces/survey';
+import { HeaderSurvey } from '../../shared/interfaces/survey';
 
 /** Represents the form for creating a survey */
 @Component({
@@ -26,14 +26,27 @@ export class CreateForm {
   sb = inject(Supabase);
   router = inject(Router);
   submited = signal(false);
+  categorysOpen: boolean = false;
+  isActive: boolean = false;
+  survID: number = 0;
   /**Array of letters used to label the answers options*/
   letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+  categorys: string[] = [
+    'Team Activities',
+    'Health & Wellness',
+    'Gaming & Entertainment',
+    'Education & Lerning',
+    'Lifestyle & Preferences',
+    'Technology & Innovation',
+  ];
+  selectedCategory: string | null = null;
 
   /**
    * Structure of the form
    */
   surveyForm = this.fb.group({
     titel: ['', [Validators.required, Validators.minLength(3)]],
+    category: ['', Validators.required],
     date: [''],
     description: [''],
     questions: this.fb.array([
@@ -54,18 +67,37 @@ export class CreateForm {
    */
   async submitSurvey() {
     if (this.surveyForm.valid) {
-      const headerData: HeaderSurvay = this.assembleFormHeader();
+      const headerData: HeaderSurvey = this.assembleFormHeader();
       const surveyRespons = await this.sb.surveyToSupabaseService(headerData);
-      const survID = surveyRespons;
-      if (survID) {
+      if (surveyRespons) {
+        this.survID = surveyRespons;
         const rawQuestionsData = this.questionArray.getRawValue();
-        await this.sb.postQuestionsService(survID, rawQuestionsData);
+        await this.sb.postQuestionsService(this.survID, rawQuestionsData);
       }
       this.submited.set(true);
-      setTimeout(() => {
-        this.router.navigate(['answer', survID]);
-      }, 1500);
+      this.isActive = true;
     }
+  }
+
+  /**
+   * Routes to the created survey
+   */
+  routeToAnswerForm() {
+    this.router.navigate(['/answer', this.survID]);
+  }
+
+  /**
+   * Switches category selection from open to closed and back
+   */
+  toggleDropdown() {
+    this.categorysOpen = !this.categorysOpen;
+    console.log(this.surveyForm.controls.category.value);
+  }
+
+  selectCategory(value: string) {
+    this.surveyForm.controls.category.setValue(value);
+    this.selectedCategory = value;
+    this.toggleDropdown();
   }
 
   /**
@@ -75,6 +107,7 @@ export class CreateForm {
   assembleFormHeader() {
     return {
       titel: this.surveyForm.controls.titel.value,
+      category: this.surveyForm.controls.category.value,
       date: this.surveyForm.controls.date.value == '' ? null : this.surveyForm.controls.date.value,
       description: this.surveyForm.controls.description.value ?? null,
     };
@@ -95,10 +128,8 @@ export class CreateForm {
    */
   addAnswers(i: number) {
     let answers = this.getAnswers(i);
-    if (answers.length < 10) {
+    if (answers.length < 6) {
       answers.push(this.fb.control('', [Validators.required, Validators.minLength(3)]));
-    } else {
-      console.log('maximal anzahl erreicht');
     }
   }
 
@@ -124,12 +155,19 @@ export class CreateForm {
    */
   removeQuestion(i: number) {
     let questions = this.surveyForm.controls.questions as FormArray;
-    let answers = this.getAnswers(i);
     if (questions.length > 1) {
       questions.removeAt(i);
     } else {
-      questions.at(0).get('question')?.setValue('');
+      questions.at(i).get('question')?.setValue('');
     }
+  }
+
+  /**
+   * Resets the value of a form controle
+   * @param control The form control to clear
+   */
+  clearInput(control: FormControl) {
+    control.setValue('');
   }
 
   /**
@@ -138,7 +176,12 @@ export class CreateForm {
    * @param aIdx The index of the answer that we remove
    */
   clearAnswers(qIdx: number, aIdx: number) {
-    this.getAnswers(qIdx).at(aIdx).setValue('');
+    let answers = this.getAnswers(qIdx);
+    if (answers.length > 2) {
+      answers.removeAt(aIdx);
+    } else {
+      answers.at(aIdx).setValue('');
+    }
   }
 
   /**
