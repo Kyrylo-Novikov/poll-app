@@ -1,59 +1,94 @@
 <section class="create-form__section">
   <form action="" class="create-form" [formGroup]="surveyForm">
     <div class="create-form__main-info">
-      <app-form-field [control]="surveyForm.controls.titel" label="Survey name"></app-form-field>
       <app-form-field
+        (onClear)="clearInput(surveyForm.controls.titel)"
+        [control]="surveyForm.controls.titel"
+        label="Survey name"
+        class="create-form__titel-input"
+      ></app-form-field>
+      <div class="create-form__categorys-wrapper">
+        <label (click)="toggleDropdown()" for="categorys" class="create-form__categorys-label"
+          >Choose category
+          <div class="create-form__dd-icon" [class.create-form__dd-icon--rot]="categorysOpen"></div
+        ></label>
+        @if (categorysOpen) {
+          <div name="" id="categorys" class="create-form__categorys-select">
+            @for (category of categorys; track $index) {
+              <div value="category" class="create-form__option" (click)="selectCategory(category)">
+                {{ category }}
+              </div>
+            }
+          </div>
+        }
+        @if (selectedCategory !== null) {
+          <div class="create-form__category-selected">{{ selectedCategory }}</div>
+        }
+      </div>
+      <app-form-field
+        (onClear)="clearInput(surveyForm.controls.date)"
+        class="create-form__date-input"
         [control]="surveyForm.controls.date"
         label="Set end date"
         type="date"
       ></app-form-field>
       <app-form-field
+        (onClear)="clearInput(surveyForm.controls.description)"
+        class="create-form__desc-input"
         [control]="surveyForm.controls.description"
         label="Describing text"
         [isTextArea]="true"
       ></app-form-field>
     </div>
-    @for (question of surveyForm.controls.questions.controls; track $index; let i = $index) {
-      <div class="create-form__question-wrapper">
-        <app-form-field
-          label="{{ i + 1 }}. Question"
-          [control]="getQuestControl(i)"
-          class="create-form__question"
-          (onClear)="removeQuestion(i)"
-        ></app-form-field>
-        <div class="create-form__answer-wrapper">
-          <div class="create-form__label-wrapper">
-            <div class="create-form__answers-headline">Answers</div>
-            <div class="create-form__answers-check">
-              <div class="create-form__check-icon-wrapper">
-                <input
-                  [formControl]="getMultiAnswers(i)"
-                  class="create-form__check-icon"
-                  type="checkbox"
-                  name=""
-                  [id]="'checkbox' + i"
-                />
+    <div class="create-form__questions-answers-wrapper">
+      @for (question of surveyForm.controls.questions.controls; track $index; let i = $index) {
+        <div class="create-form__question-wrapper">
+          <app-form-field
+            label="{{ i + 1 }}. Question"
+            [control]="getQuestControl(i)"
+            class="create-form__question"
+            (onClear)="removeQuestion(i)"
+          ></app-form-field>
+          <div class="create-form__answer-wrapper">
+            <div class="create-form__label-wrapper">
+              <div class="create-form__answers-headline">Answers</div>
+              <div class="create-form__answers-check">
+                <div class="create-form__check-icon-wrapper">
+                  <input
+                    [formControl]="getMultiAnswers(i)"
+                    class="create-form__check-icon"
+                    type="checkbox"
+                    name=""
+                    [id]="'checkbox' + i"
+                  />
+                </div>
+                <label [attr.for]="'checkbox' + i">Allow multiple answers.</label>
               </div>
-              <label [attr.for]="'checkbox' + i">Allow multiple answers.</label>
             </div>
+            @for (answer of getAnswers(i).controls; track $index; let idx = $index) {
+              <app-form-field
+                (onClear)="clearAnswers(i, idx)"
+                [control]="$any(answer)"
+                [label]="answerSign(idx)"
+              ></app-form-field>
+            }
           </div>
-          @for (answer of getAnswers(i).controls; track $index; let idx = $index) {
-            <app-form-field
-              (onClear)="clearAnswers(i, idx)"
-              [control]="$any(answer)"
-              [label]="answerSign(idx)"
-            ></app-form-field>
-          }
+          <div class="create-form__add-answers-wrapper">
+            <app-btn
+              label="Add answer"
+              (click)="addAnswers(i)"
+              variant="btn--answer"
+              prioritize
+            ></app-btn>
+            @if (getAnswers(i).length > 2 && getAnswers(i).length < 6) {
+              <div class="create-form__add-answers-info">you can add up to 6 answers.</div>
+            } @else if (getAnswers(i).length == 6) {
+              <div class="create-form__add-answers-info">You reached the maximum answer count.</div>
+            }
+          </div>
         </div>
-
-        <app-btn
-          label="Add answer"
-          (click)="addAnswers(i)"
-          variant="btn--answer"
-          prioritize
-        ></app-btn>
-      </div>
-    }
+      }
+    </div>
     <app-btn
       class="create-form__add-question"
       label="Add next question"
@@ -66,11 +101,12 @@
     (click)="submitSurvey()"
     label="Publish"
     iconSrc="publish"
+    [isActive]="isActive"
     [disabled]="!surveyForm.valid"
   ></app-btn>
 </section>
 @if (submited()) {
-  <div class="create-form__submit-overlay">
+  <div (click)="routeToAnswerForm()" class="create-form__submit-overlay">
     <app-card></app-card>
   </div>
 }
