@@ -3,10 +3,11 @@ import { NgOptimizedImage } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
+import { Btn } from '../btn/btn';
 
 @Component({
   selector: 'app-header',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, Btn],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -15,6 +16,8 @@ export class HeaderComponent {
   readonly logoSrc: string = '/assets/imgs/icons/header-orange.svg';
   readonly whiteBgLogoSrc: string = '/assets/imgs/icons/header-purple.svg';
   readonly isLandingPage = computed(() => this.currentUrl() === '/');
+  readonly isAnswerPage = computed(() => this.currentUrl().startsWith('/answer'));
+  isActive: boolean = false;
 
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
@@ -23,4 +26,11 @@ export class HeaderComponent {
     ),
     { initialValue: this.router.url },
   );
+
+  routeToCreateSurvey() {
+    this.isActive = true;
+    setTimeout(() => {
+      this.router.navigate(['/create']);
+    }, 300);
+  }
 }

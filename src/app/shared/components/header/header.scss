@@ -9,7 +9,17 @@
   }
   &__container {
     @extend .container;
-    padding: 48px 16px;
+    padding: 48px var(--pd-lat-s);
+    @include flex-center(y, row);
+    justify-content: space-between;
+    @media (min-width: 768px) {
+      padding: 48px var(--pd-lat-m);
+    }
+    @media (min-width: 1024px) {
+      padding: 56px var(--pd-lat-l);
+    }
+  }
+  &__logo-wrapper {
     display: flex;
     flex-direction: row;
     gap: 7px;

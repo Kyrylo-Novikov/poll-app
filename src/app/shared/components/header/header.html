@@ -1,13 +1,18 @@
 <header class="header" [class.header--primary]="isLandingPage()">
   <div class="header__container">
-    <img
-      class="header__logo"
-      priority
-      [ngSrc]="isLandingPage() ? logoSrc : whiteBgLogoSrc"
-      alt=""
-      width="70"
-      height="50"
-    />
-    <span class="header__title">Poll<br />App</span>
+    <div class="header__logo-wrapper">
+      <img
+        class="header__logo"
+        priority
+        [ngSrc]="isLandingPage() ? logoSrc : whiteBgLogoSrc"
+        alt=""
+        width="70"
+        height="50"
+      />
+      <span class="header__title">Poll<br />App</span>
+    </div>
+    @if (isAnswerPage()) {
+      <app-btn [isActive]="isActive" label="New Survey" (click)="routeToCreateSurvey()"> </app-btn>
+    }
   </div>
 </header>
