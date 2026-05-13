@@ -1,14 +1,14 @@
 .field {
   gap: 4px;
-  display: flex;
-  flex-direction: column;
-  &__label-wrapper {
-    color: var(--c-white);
-    font-size: var(--f-sz-3);
-    font-weight: 700;
-    display: flex;
-    justify-content: space-between;
-    padding-right: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto 12px;
+  grid-template-areas: 'label clear .' 'input input input';
+  color: var(--c-white);
+  font-size: var(--f-sz-3);
+  font-weight: 600;
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr auto;
+    grid-template-areas: 'label label label' 'input input clear';
   }
   &__opt-marker {
     font-weight: 100;
@@ -19,14 +19,47 @@
     padding: 7px 13px;
     width: 100%;
     cursor: pointer;
+    outline: none;
+    grid-area: input;
+    &:focus {
+      background-color: var(--c-inp-act);
+    }
   }
   &__label {
     cursor: pointer;
     user-select: none;
+    grid-area: label;
   }
 
   &__clear-input {
+    color: var(--c-white);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
     cursor: pointer;
+    grid-area: clear;
+    align-self: center;
+    border-radius: 3px;
+    width: fit-content;
+    height: fit-content;
+    &:hover {
+      background-color: var(--c-pri-oran-60);
+    }
+    &:hover svg {
+      color: var(--c-pri-purp);
+    }
+  }
+  &--textarea {
+    .field__clear-input {
+      align-self: start;
+      margin-top: 7px;
+    }
+    .field__inp {
+      resize: none;
+    }
   }
 }
 input[type='date'] {
