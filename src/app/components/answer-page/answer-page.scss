@@ -15,7 +15,6 @@
       grid-template-columns: 1fr 1fr 140px;
     }
   }
-
   &__live-result {
     padding: 48px 0;
     position: relative;
@@ -35,7 +34,6 @@
     padding-right: 16px;
     @include flex-center(y, row);
     justify-content: space-between;
-
     img {
       background-color: var(--c-sec-oran);
     }
