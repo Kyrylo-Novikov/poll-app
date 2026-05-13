@@ -1,9 +1,10 @@
-import { Component, effect, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Survey } from '../../shared/interfaces/survey';
 import { Btn } from '../../shared/components/btn/btn';
 import { Supabase } from '../../shared/service/supabase';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-answer-form',
@@ -18,7 +19,27 @@ export class AnswerForm {
   surveyData = input<Survey | null>(null);
   sb = inject(Supabase);
   answerForm: FormGroup = this.fb.group({});
+
+  /**
+   * Emits the selected answers when the user submits the form
+   */
   votesSubmitted = output<number[]>();
+  /**
+   * Emits the selected answers in real-time during selection
+   */
+  liveUpdateVote = output<number[]>();
+  /**Monitors the form values on changes and transform it to a signal */
+  formValues = toSignal(this.answerForm.valueChanges, { initialValue: {} });
+
+  /**
+   * Flattens the form valures into a single array and filter out empty or null values
+   */
+  liveVote = computed(() => {
+    return Object.values(this.formValues())
+      .flat()
+      .filter((val) => val !== null && val !== '') as number[];
+  });
+
   /**
    * When data is available use addControls
    */
@@ -26,6 +47,9 @@ export class AnswerForm {
     effect(() => {
       const data = this.surveyData();
       if (data) this.addControls();
+    });
+    effect(() => {
+      this.liveUpdateVote.emit(this.liveVote());
     });
   }
 
@@ -65,10 +89,9 @@ export class AnswerForm {
   }
 
   /**
-   * Flattens selected answer IDs and emits the ids of the votes to the parent component
+   * Emits the ids of the votes to the parent component
    */
   completeSurveyVote() {
-    const votesID = Object.values(this.answerForm.value).flat() as number[];
-    this.votesSubmitted.emit(votesID);
+    this.votesSubmitted.emit(this.liveVote());
   }
 }
