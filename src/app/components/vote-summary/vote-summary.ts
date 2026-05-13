@@ -26,7 +26,7 @@ export class VoteSummary {
 
   /**
    * Prepares the survey data for the UI by calculating votes and percentages.
-   * Updates automaticlly when data or user selections change.
+   * Updates automatically when data or user selections change.
    * @returns Array of questions with calculated vote sums and percentages
    */
   processedData = computed(() => {
@@ -38,7 +38,7 @@ export class VoteSummary {
   });
 
   /**
-   * Calculates persentage of votes for each answer.
+   * Calculates percentage of votes for each answer.
    * @param q The data object for a single question
    * @returns The question object extended with the total vote sum and the percentage for the answer.
    */
@@ -53,13 +53,13 @@ export class VoteSummary {
   }
 
   /**
-   * Calculates the current votes for a question. If the user has selected an answer, its vote count is incremented.Finally it , calculates the total sum of all votes
+   * Calculates the current votes for a question. If the user has selected an answer, its vote count is incremented. Finally, it calculates the total sum of all votes
    * @param q The data object for a single question
    * @returns The question object extended with updated answer votes and the total sum.
    */
   addLiveVotes(q: QuestionData) {
     let localSum = 0;
-    const updatetAnswer = q.answers.map((a) => {
+    const updatedAnswer = q.answers.map((a) => {
       let currentVote = a.votes;
       if (this.liveSelections().includes(a.id)) {
         currentVote += 1;
@@ -67,6 +67,6 @@ export class VoteSummary {
       localSum += currentVote;
       return { ...a, votes: currentVote };
     });
-    return { answers: updatetAnswer, sum: localSum };
+    return { answers: updatedAnswer, sum: localSum };
   }
 }
