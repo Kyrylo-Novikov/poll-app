@@ -8,7 +8,7 @@
   &__meta-data-wrapper {
     @include flex-center(y, row);
     justify-content: space-between;
-    padding: 16px 0;
+
     font-size: var(--f-sz-1);
   }
   &__titel {
