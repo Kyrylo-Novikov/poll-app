@@ -13,7 +13,7 @@
     flex-direction: column;
   }
   &__header {
-    padding: 40px 16px 16px 0;
+    padding: 40px var(--pd-lat-s) var(--pd-lat-s) 0;
     gap: 16px;
     @include flex-center(x);
   }
@@ -33,5 +33,9 @@
     background-color: color-mix(in srgb, var(--c-pri-oran), transparent 70%);
     padding: 8px 12px;
     border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: color-mix(in srgb, var(--c-pri-oran), transparent 30%);
+    }
   }
 }
