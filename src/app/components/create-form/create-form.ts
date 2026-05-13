@@ -91,7 +91,6 @@ export class CreateForm {
    */
   toggleDropdown() {
     this.categorysOpen = !this.categorysOpen;
-    console.log(this.surveyForm.controls.category.value);
   }
 
   selectCategory(value: string) {
