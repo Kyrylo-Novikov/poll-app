@@ -1,0 +1,26 @@
+<section class="vote-summary">
+  <div class="vote-summary__container">
+    <h2 class="vote-summary__headline">
+      Survey results <span class="vote-summary__headline-span">LIVE</span>
+    </h2>
+    @for (question of processedData(); track $index; let iQ = $index) {
+      <div class="vote-summary__whole-question-wrapper">
+        <div class="vote-summary__question-wrapper">
+          <div class="vote-summary__headline-num">{{ iQ + 1 }}.</div>
+          <h3 class="vote-summary__question-headline">{{ question.question }}</h3>
+        </div>
+        @for (answers of question.answers; track $index; let iA = $index) {
+          <div class="vote-summary__live-answer">
+            <p class="vote-summary__answer-letter">{{ letters()[iA] }}.</p>
+            <div class="vote-summary__bar-wrapper">
+              <div class="vote-summary__bar-max">
+                <div class="vote-summary__bar-current" [style.width.%]="answers.percent"></div>
+              </div>
+            </div>
+            <p class="vote-summary__percent">{{ answers.percent }}%</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
