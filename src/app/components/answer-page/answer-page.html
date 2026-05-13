@@ -1,39 +1,43 @@
 <section class="answer-page">
-  <div class="answer-page__container">
-    <div class="answer-page__content">
-      <div class="answer-page__survey">
-        <div class="answer-page__icon-wrapper">
-          <app-badge lable="Published"></app-badge>
-          <img
-            routerLink="/"
-            class="answer-page__close-form"
-            src="/assets/imgs/icons/close_purple.svg"
-            alt=""
-            srcset=""
-          />
+  <div class="answer-page__wrapper">
+    <div class="answer-page__container">
+      <div class="answer-page__content">
+        <div class="answer-page__survey">
+          <div class="answer-page__icon-wrapper">
+            <app-badge lable="Published"></app-badge>
+            <img
+              routerLink="/"
+              class="answer-page__close-form"
+              src="/assets/imgs/icons/close_purple.svg"
+              alt=""
+              srcset=""
+            />
+          </div>
+          <app-answer-form
+            (votesSubmitted)="saveVotesToDatabase($event)"
+            (liveUpdateVote)="checkedAnswerIDs.set($event)"
+            [surveyData]="surveyData()"
+            [letters]="letters"
+          ></app-answer-form>
         </div>
-        <app-answer-form
-          (votesSubmitted)="saveVotesToDatabase($event)"
-          [surveyData]="surveyData()"
-          [letters]="letters"
-        ></app-answer-form>
       </div>
     </div>
-  </div>
 
-  <div class="answer-page__live-result">
-    <div class="answer-page__drop-down-wrapper" (click)="toggleDD()">
-      <div class="answer-page__drop-down-titel">
-        {{ openDD ? 'Close results' : 'See results' }}
+    <div class="answer-page__live-result">
+      <div class="answer-page__drop-down-wrapper" (click)="toggleDD()">
+        <div class="answer-page__drop-down-titel">
+          {{ openDD ? 'Close results' : 'See results' }}
+        </div>
+        <div class="answer-page__drop-down-icon" [class.open]="openDD"></div>
       </div>
-      <div class="answer-page__drop-down-icon" [class.open]="openDD"></div>
-    </div>
-    <div>
-      <app-vote-summary
-        [style.display]="openDD ? 'flex' : 'none'"
-        [letters]="letters"
-        [surveyData]="surveyData()"
-      ></app-vote-summary>
+      <div>
+        <app-vote-summary
+          [liveSelections]="checkedAnswerIDs()"
+          [style.display]="openDD ? 'flex' : 'none'"
+          [letters]="letters"
+          [surveyData]="surveyData()"
+        ></app-vote-summary>
+      </div>
     </div>
   </div>
 </section>
