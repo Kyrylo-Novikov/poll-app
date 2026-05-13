@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '../types/database.types';
 import { Environment } from '../../environment';
-import { Survey, HeaderSurvay, QuestionData, AnswersData } from '../interfaces/survey';
+import { Survey, HeaderSurvey, QuestionData, AnswersData } from '../interfaces/survey';
 
 type tableName = 'answers' | 'question' | 'survey';
 @Injectable({
@@ -32,7 +32,7 @@ export class Supabase {
    * Submits survey metadata to the database.
    * On success , triggers the insertion of associated questions
    */
-  async surveyToSupabaseService(headerData: HeaderSurvay) {
+  async surveyToSupabaseService(headerData: HeaderSurvey) {
     const { data, error } = await this.supabaseClient
       .from('survey')
       .insert([headerData])
