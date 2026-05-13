@@ -1,4 +1,4 @@
-export interface HeaderSurvay {
+export interface HeaderSurvey {
   id?: number | null;
   titel: string | null;
   category?: string | null;
@@ -22,6 +22,6 @@ export interface QuestionData {
   answers: AnswersData[];
 }
 
-export interface Survey extends HeaderSurvay {
+export interface Survey extends HeaderSurvey {
   questions: QuestionData[];
 }
